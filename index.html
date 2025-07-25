@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Clash 一键订阅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 2em;
+      text-align: center;
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 2em;
+      max-width: 500px;
+      margin: auto;
+    }
+    h1 {
+      color: #4a90e2;
+      font-size: 24px;
+    }
+    a.button {
+      display: inline-block;
+      margin: 10px 5px;
+      padding: 12px 24px;
+      background-color: #4a90e2;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+    a.button:hover {
+      background-color: #357ab8;
+    }
+    .note {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #777;
+      text-align: left;
+    }
+    code {
+      background: #eee;
+      padding: 4px 6px;
+      border-radius: 4px;
+      display: block;
+      margin-top: 5px;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Clash 一键订阅</h1>
+    <p>点击以下任一按钮，即可导入 Clash 配置：</p>
+    
+    <!-- 主订阅按钮 -->
+    <a class="button" href="clash://install-config?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftgds100%2Fmyip%2Fmain%2Fdy%2FMihimo.yaml">
+      🚀 一键导入到 Clash
+    </a>
+
+    <!-- 备用订阅按钮 -->
+    <a class="button" href="clash://install-config?url=https%3A%2F%2Fgit.ppp.ac.cn%2Fhttps%3A%2F%2Fraw.githubusercontent.com%2Ftgds100%2Fmyip%2Frefs%2Fheads%2Fmain%2Fdy%2FMihimo.yaml">
+      📦 备用订阅
+    </a>
+
+    <div class="note">
+      <p><strong>手动导入链接（主订阅）：</strong></p>
+      <code>https://raw.githubusercontent.com/tgds100/myip/main/dy/Mihimo.yaml</code>
+
+      <p><strong>备用订阅地址：</strong></p>
+      <code>https://git.ppp.ac.cn/https://raw.githubusercontent.com/tgds100/myip/refs/heads/main/dy/Mihimo.yaml</code>
+    </div>
+  </div>
+</body>
+</html>
