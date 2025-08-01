@@ -41,6 +41,7 @@
       max-width: 600px;
       margin: 3em auto 2em auto;
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      overflow-wrap: break-word;
     }
 
     h1 {
@@ -62,6 +63,10 @@
       text-decoration: none;
       border-radius: 8px;
       transition: background-color 0.3s;
+      max-width: 100%;
+      flex-wrap: wrap;
+      word-break: break-word;
+      text-align: center;
     }
 
     a.button:hover {
@@ -188,6 +193,13 @@
       a.button {
         width: 100%;
         justify-content: center;
+        padding: 12px 0;
+        font-size: 15px;
+      }
+
+      a.button img {
+        width: 16px;
+        height: 16px;
       }
 
       .theme-toggle {
@@ -249,7 +261,6 @@
     </div>
   </div>
 
-  <!-- 本地二维码生成 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     function copyToClipboard(id) {
