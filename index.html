@@ -1,81 +1,294 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Clash 一键订阅</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
-      background-color: #f8f9fa;
-      color: #333;
-      padding: 2em;
-      text-align: center;
+    :root {
+      --bg-color: #f9fafb;
+      --text-color: #222;
+      --card-bg: #ffffff;
+      --code-bg: #f1f3f5;
+      --button-bg: #409eff;
+      --button-hover: #66b1ff;
+      --note-color: #555;
     }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --card-bg: #1f1f1f;
+      --code-bg: #2e2e2e;
+      --button-bg: #409eff;
+      --button-hover: #66b1ff;
+      --note-color: #aaa;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      transition: all 0.3s ease;
+    }
+
     .container {
-      background: white;
+      background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       padding: 2em;
-      max-width: 500px;
-      margin: auto;
+      max-width: 600px;
+      margin: 3em auto 2em auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
+
     h1 {
-      color: #4a90e2;
       font-size: 24px;
+      color: var(--button-bg);
+      margin-bottom: 10px;
     }
+
     a.button {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       margin: 10px 5px;
-      padding: 12px 24px;
-      background-color: #4a90e2;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: var(--button-bg);
       color: white;
       text-decoration: none;
-      font-size: 16px;
       border-radius: 8px;
       transition: background-color 0.3s;
     }
+
     a.button:hover {
-      background-color: #357ab8;
+      background-color: var(--button-hover);
     }
+
+    a.button img {
+      width: 18px;
+      height: 18px;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: var(--text-color);
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 26px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--button-bg);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
     .note {
       margin-top: 20px;
       font-size: 14px;
-      color: #777;
+      color: var(--note-color);
       text-align: left;
     }
+
+    .code-block {
+      margin-bottom: 20px;
+      word-break: break-word;
+    }
+
     code {
-      background: #eee;
-      padding: 4px 6px;
-      border-radius: 4px;
-      display: block;
+      background: var(--code-bg);
+      padding: 6px 8px;
+      border-radius: 6px;
+      display: inline-block;
       margin-top: 5px;
-      word-wrap: break-word;
+      white-space: normal;
+      max-width: 100%;
+    }
+
+    .qr {
+      margin-top: 8px;
+    }
+
+    .qr canvas {
+      border-radius: 8px;
+      background: white;
+      padding: 4px;
+    }
+
+    .copy-btn {
+      margin-left: 10px;
+      padding: 4px 10px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      background-color: var(--button-bg);
+      color: white;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--button-hover);
+    }
+
+    .tip {
+      font-size: 12px;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    @media screen and (max-width: 480px) {
+      .container {
+        margin: 1em;
+        padding: 1.5em;
+      }
+
+      a.button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .theme-toggle {
+        top: 8px;
+        right: 8px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="theme-toggle">
+    <span style="margin-right: 8px;">🌗 明暗模式</span>
+    <label class="toggle-switch">
+      <input type="checkbox" onchange="toggleTheme()" id="themeSwitch">
+      <span class="slider"></span>
+    </label>
+  </div>
+
   <div class="container">
     <h1>Clash 一键订阅</h1>
-    <p>点击以下任一按钮，即可导入 Clash 配置：</p>
-    
-    <!-- 主订阅按钮 -->
+    <p>点击以下按钮导入 Clash 配置</p>
+
     <a class="button" href="clash://install-config?url=https%3A%2F%2Fraw.githubusercontent.com%2Ftgds100%2Fmyip%2Fmain%2Fdy%2FMihimo.yaml">
-      🚀 一键导入到 Clash
+      <img src="https://raw.githubusercontent.com/dc8683/picx-images-hosting/master/rocket/Clash.9gwri62wr1.webp" alt="rocket">
+      一键导入 Clash
     </a>
 
-    <!-- 备用订阅按钮 -->
-    <a class="button" href="clash://install-config?url=https%3A%2F%2Fgit.ppp.ac.cn%2Fhttps%3A%2F%2Fraw.githubusercontent.com%2Ftgds100%2Fmyip%2Frefs%2Fheads%2Fmain%2Fdy%2FMihimo.yaml">
-      📦 备用订阅
-    </a>
+    <p class="tip">若无响应，请检查是否已经打开clash客户端。</p>
 
     <div class="note">
-      <p><strong>手动导入链接（主订阅）：</strong></p>
-      <code>https://raw.githubusercontent.com/tgds100/myip/main/dy/Mihimo.yaml</code>
+      <div class="code-block">
+        <strong>Clash 订阅地址：</strong><br>
+        <code id="clash1">https://raw.githubusercontent.com/tgds100/myip/main/dy/Mihimo.yaml</code>
+        <button class="copy-btn" onclick="copyToClipboard('clash1')">复制</button>
+        <div class="qr" id="qr-clash1"></div>
+      </div>
 
-      <p><strong>备用订阅地址：</strong></p>
-      <code>https://git.ppp.ac.cn/https://raw.githubusercontent.com/tgds100/myip/refs/heads/main/dy/Mihimo.yaml</code>
+      <div class="code-block">
+        <strong>Clash 国内加速</strong><br>
+        <code id="clash2">https://ghproxy.net/https://raw.githubusercontent.com/tgds100/myip/refs/heads/main/dy/Mihimo.yaml</code>
+        <button class="copy-btn" onclick="copyToClipboard('clash2')">复制</button>
+        <div class="qr" id="qr-clash2"></div>
+      </div>
+
+      <div class="code-block">
+        <strong>V2rayN 订阅地址：</strong><br>
+        <code id="v2ray1">https://raw.githubusercontent.com/tgds100/myip/refs/heads/main/dy/Base64.txt</code>
+        <button class="copy-btn" onclick="copyToClipboard('v2ray1')">复制</button>
+        <div class="qr" id="qr-v2ray1"></div>
+      </div>
+
+      <div class="code-block">
+        <strong>V2rayN 国内加速</strong><br>
+        <code id="v2ray2">https://ghproxy.net/https://raw.githubusercontent.com/tgds100/myip/refs/heads/main/dy/Base64.txt</code>
+        <button class="copy-btn" onclick="copyToClipboard('v2ray2')">复制</button>
+        <div class="qr" id="qr-v2ray2"></div>
+      </div>
     </div>
   </div>
+
+  <!-- 本地二维码生成 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    function copyToClipboard(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("已复制！");
+      }).catch(() => {
+        alert("复制失败，请手动复制！");
+      });
+    }
+
+    function generateQRCode(id, text) {
+      new QRCode(document.getElementById(id), {
+        text: text,
+        width: 120,
+        height: 120,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    window.onload = () => {
+      generateQRCode("qr-clash1", document.getElementById("clash1").innerText);
+      generateQRCode("qr-clash2", document.getElementById("clash2").innerText);
+      generateQRCode("qr-v2ray1", document.getElementById("v2ray1").innerText);
+      generateQRCode("qr-v2ray2", document.getElementById("v2ray2").innerText);
+
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.getElementById("themeSwitch").checked = true;
+      }
+    };
+
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      const newTheme = isDark ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+    }
+  </script>
 </body>
 </html>
